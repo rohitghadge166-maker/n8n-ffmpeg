@@ -1,16 +1,20 @@
-# n8n with FFmpeg on Render
+# n8n + ffmpeg on Render
 
-This repo lets you deploy **n8n** on Render with **FFmpeg** available.
+This repo contains a Docker setup for deploying **n8n** with **ffmpeg** on Render.
 
-## Deploy (Render)
-1) Create New Web Service → connect this repo  
-2) Environment: **Docker**  
-3) Add Env Vars (suggested):
-   - N8N_BASIC_AUTH_ACTIVE=true
-   - N8N_BASIC_AUTH_USER=yourusername
-   - N8N_BASIC_AUTH_PASSWORD=yourpassword
-   - WEBHOOK_TUNNEL_URL=https://your-service.onrender.com/
-   - N8N_HOST=0.0.0.0
-   - N8N_PORT=5678
+## 🚀 Deploy on Render
 
-After deploy, test inside n8n → Execute Command:
+1. Fork or upload this repo to your GitHub.
+2. Go to [Render](https://render.com).
+3. Create a **New Web Service** → Select this repo.
+4. Choose **Runtime = Docker**.
+5. Add Environment Variables in Render:
+   - `N8N_BASIC_AUTH_ACTIVE=true`
+   - `N8N_BASIC_AUTH_USER=admin`
+   - `N8N_BASIC_AUTH_PASSWORD=yourpassword`
+   - `N8N_HOST=0.0.0.0`
+   - `N8N_PORT=5678`
+   - `NODE_ENV=production`
+6. Deploy 🚀
+
+Now your n8n instance has ffmpeg available inside it.
