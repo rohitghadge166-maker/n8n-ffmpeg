@@ -1,21 +1,28 @@
 FROM n8nio/n8n:latest
 
+# Switch to root for installing packages
 USER root
-RUN apk add --no-cache ffmpeg
 
-# Swap create
+# Install ffmpeg (for video/audio/image handling)
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+# Create 1GB swapfile for extra virtual memory
 RUN fallocate -l 1G /swapfile && \
     chmod 600 /swapfile && \
     mkswap /swapfile
 
-# Memory limit
+# Set Node memory limit (384 MB safe for Render free tier)
 ENV NODE_OPTIONS="--max-old-space-size=384"
 
-# Custom entrypoint
-RUN echo '#!/bin/bash\n\
-swapon /swapfile || echo "swap failed (probably Render kernel)"\n\
-exec n8n' > /start.sh && chmod +x /start.sh
+# Create a reliable start script
+RUN printf '#!/bin/bash\n\
+set -e\n\
+swapon /swapfile || echo "swap already active or failed"\n\
+exec n8n\n' > /usr/local/bin/custom-start.sh \
+    && chmod +x /usr/local/bin/custom-start.sh
 
-ENTRYPOINT ["/start.sh"]
+# Use the custom script as entrypoint
+ENTRYPOINT ["/usr/local/bin/custom-start.sh"]
 
+# Switch back to non-root user (important for security)
 USER node
