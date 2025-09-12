@@ -3,9 +3,6 @@ FROM n8nio/n8n:latest
 # Switch to root for installing packages
 USER root
 
-# Install ffmpeg (for video/audio/image handling)
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
-
 # Create 1GB swapfile for extra virtual memory
 RUN fallocate -l 1G /swapfile && \
     chmod 600 /swapfile && \
