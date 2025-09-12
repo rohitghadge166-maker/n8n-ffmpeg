@@ -13,9 +13,6 @@ RUN fallocate -l 1G /swapfile && \
 ENV NODE_OPTIONS="--max-old-space-size=384"
 
 # Create a custom entrypoint to enable swap before starting n8n
-RUN echo '#!/bin/sh\n\
-swapon /swapfile\n\
-exec n8n' > /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Switch back to n8n user (important)
 USER node
