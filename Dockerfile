@@ -3,7 +3,7 @@ FROM n8nio/n8n:latest
 USER root
 RUN apk add --no-cache ffmpeg
 
-# Swap file create
+# Swap create
 RUN fallocate -l 1G /swapfile && \
     chmod 600 /swapfile && \
     mkswap /swapfile
@@ -11,8 +11,11 @@ RUN fallocate -l 1G /swapfile && \
 # Memory limit
 ENV NODE_OPTIONS="--max-old-space-size=384"
 
-# CMD with full path to sh
-CMD ["/bin/sh", "-c", "swapon /swapfile && exec n8n"]
+# Custom entrypoint
+RUN echo '#!/bin/bash\n\
+swapon /swapfile || echo "swap failed (probably Render kernel)"\n\
+exec n8n' > /start.sh && chmod +x /start.sh
 
-# Run as n8n user after swap
+ENTRYPOINT ["/start.sh"]
+
 USER node
