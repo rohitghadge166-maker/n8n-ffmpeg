@@ -1,25 +1,21 @@
 FROM n8nio/n8n:latest
 
-# Switch to root for installing packages
+# Install ffmpeg (Alpine uses apk)
 USER root
+RUN apk add --no-cache ffmpeg
 
-# Create 1GB swapfile for extra virtual memory
+# Enable 1GB swap file for extra virtual memory
 RUN fallocate -l 1G /swapfile && \
     chmod 600 /swapfile && \
     mkswap /swapfile
 
-# Set Node memory limit (384 MB safe for Render free tier)
+# Set NODE_OPTIONS for safe memory limit (384 MB)
 ENV NODE_OPTIONS="--max-old-space-size=384"
 
-# Create a reliable start script
-RUN printf '#!/bin/bash\n\
-set -e\n\
-swapon /swapfile || echo "swap already active or failed"\n\
-exec n8n\n' > /usr/local/bin/custom-start.sh \
-    && chmod +x /usr/local/bin/custom-start.sh
+# Create a custom entrypoint to enable swap before starting n8n
+RUN echo '#!/bin/sh\n\
+swapon /swapfile\n\
+exec n8n' > /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
-# Use the custom script as entrypoint
-ENTRYPOINT ["/usr/local/bin/custom-start.sh"]
-
-# Switch back to non-root user (important for security)
+# Switch back to n8n user (important)
 USER node
