@@ -1,10 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "[INFO] Enabling swap file..."
-swapon /swapfile || echo "[WARN] Swap already enabled or failed"
-
-free -h
+echo "[INFO] Starting n8n container..."
 
 # Increase Node.js heap size
 export NODE_OPTIONS="--max-old-space-size=1024"
@@ -13,6 +10,7 @@ export NODE_OPTIONS="--max-old-space-size=1024"
 DB_HOST="${DB_HOST:-aws-1-ap-south-1.pooler.supabase.com}"
 DB_PORT="${DB_PORT:-6543}"
 
+# Wait for Supabase to be reachable (retry logic)
 echo "[INFO] Checking Supabase connectivity..."
 for i in {1..60}; do
   if nc -z "$DB_HOST" "$DB_PORT"; then
