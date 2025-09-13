@@ -1,26 +1,24 @@
 #!/bin/bash
 set -e
 
-echo "[INFO] Creating swap file for extra RAM..."
-# 🔥 4GB Swap bana rahe hain (free plan me bhi chalega)
-sudo fallocate -l 4G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-echo "[INFO] Swap enabled. Free memory now:"
+echo "[INFO] Enabling swap file..."
+# Swap file created at build time, just enable it
+swapon /swapfile || echo "[WARN] Swap already enabled or failed"
+
+# Show free memory
 free -h
 
-# Increase Node.js heap to 1GB
+# Increase Node.js heap size
 export NODE_OPTIONS="--max-old-space-size=1024"
 
-# Wait until Supabase DB is reachable
+# Supabase DB connection settings (environment vars preferred)
 DB_HOST="${DB_HOST:-your-db-host.supabase.co}"
 DB_PORT="${DB_PORT:-6543}"
 
 echo "[INFO] Checking Supabase connectivity..."
 for i in {1..30}; do
   if nc -z "$DB_HOST" "$DB_PORT"; then
-    echo "[INFO] ✅ Database is reachable. Starting n8n..."
+    echo "[INFO] ✅ Database reachable. Starting n8n..."
     break
   else
     echo "[WARN] DB not reachable yet, retrying in 5s..."
@@ -28,5 +26,5 @@ for i in {1..30}; do
   fi
 done
 
-# Start n8n
+# Start n8n normally
 exec n8n
