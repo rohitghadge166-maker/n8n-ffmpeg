@@ -1,16 +1,19 @@
-# ✅ n8n + ffmpeg + util-linux + swap + custom entrypoint
+# Base n8n image
 FROM n8nio/n8n:latest
 
-# Install ffmpeg + util-linux (swap banane ke liye)
+# Install util-linux + bash (for swap and script)
 USER root
-RUN apk add --no-cache ffmpeg util-linux bash
+RUN apk add --no-cache util-linux bash
 
-# Copy custom entrypoint inside container
+# Create 4GB swap during build (optional)
+RUN fallocate -l 4G /swapfile && chmod 600 /swapfile && mkswap /swapfile
+
+# Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Switch back to n8n user (important)
+# Switch back to node user
 USER node
 
-# Run our custom entrypoint instead of default
+# Use custom entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
