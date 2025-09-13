@@ -2,21 +2,19 @@
 set -e
 
 echo "[INFO] Enabling swap file..."
-# Swap file created at build time, just enable it
 swapon /swapfile || echo "[WARN] Swap already enabled or failed"
 
-# Show free memory
 free -h
 
 # Increase Node.js heap size
 export NODE_OPTIONS="--max-old-space-size=1024"
 
-# Supabase DB connection settings (environment vars preferred)
+# Supabase DB connection settings
 DB_HOST="${DB_HOST:-aws-1-ap-south-1.pooler.supabase.com}"
 DB_PORT="${DB_PORT:-6543}"
 
 echo "[INFO] Checking Supabase connectivity..."
-for i in {1..30}; do
+for i in {1..60}; do
   if nc -z "$DB_HOST" "$DB_PORT"; then
     echo "[INFO] ✅ Database reachable. Starting n8n..."
     break
@@ -26,5 +24,5 @@ for i in {1..30}; do
   fi
 done
 
-# Start n8n normally
+# Start n8n
 exec n8n
