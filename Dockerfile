@@ -1,20 +1,16 @@
+# ✅ n8n + ffmpeg + util-linux + swap + custom entrypoint
 FROM n8nio/n8n:latest
 
-# Switch to root to install dependencies & setup swap
+# Install ffmpeg + util-linux (swap banane ke liye)
 USER root
+RUN apk add --no-cache ffmpeg util-linux bash
 
-# Install ffmpeg + swap tools (Alpine lightweight tools)
-RUN apk add --no-cache ffmpeg util-linux
+# Copy custom entrypoint inside container
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Create 1GB swap file safely
-RUN fallocate -l 1G /swapfile && \
-    chmod 600 /swapfile && \
-    mkswap /swapfile && \
-    swapon /swapfile || true && \
-    echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
-
-# Set Node memory limit to 384MB (avoid OOM crash)
-ENV NODE_OPTIONS="--max-old-space-size=384"
-
-# Switch back to node user for n8n to run safely
+# Switch back to n8n user (important)
 USER node
+
+# Run our custom entrypoint instead of default
+ENTRYPOINT ["/entrypoint.sh"]
