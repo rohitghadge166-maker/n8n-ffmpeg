@@ -12,7 +12,7 @@ free -h
 export NODE_OPTIONS="--max-old-space-size=1024"
 
 # Supabase DB connection settings (environment vars preferred)
-DB_HOST="${DB_HOST:-your-db-host.supabase.co}"
+DB_HOST="${DB_HOST:-aws-1-ap-south-1.pooler.supabase.com}"
 DB_PORT="${DB_PORT:-6543}"
 
 echo "[INFO] Checking Supabase connectivity..."
