@@ -20,8 +20,6 @@ services:
         value: Raohit@123qwer
       - key: DB_POSTGRESDB_SCHEMA
         value: public
-      - key: PORT
-        value: "5678"
       - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
         value: "true"
       - key: GENERIC_TIMEZONE
