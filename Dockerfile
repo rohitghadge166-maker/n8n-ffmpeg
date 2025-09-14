@@ -4,4 +4,5 @@ USER root
 RUN apk add --no-cache ffmpeg
 USER node
 
-CMD ["n8n", "start", "--verbose"]
+ENTRYPOINT ["n8n"]
+CMD ["start", "--verbose"]
