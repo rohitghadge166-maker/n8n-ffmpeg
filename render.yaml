@@ -11,13 +11,13 @@ services:
       - key: DB_POSTGRESDB_HOST
         value: aws-1-ap-south-1.pooler.supabase.com
       - key: DB_POSTGRESDB_PORT
-        value: 6543
+        value: "6543"
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres.hk...
+        value: postgres.hkuupvjihrefteunshpk
       - key: DB_POSTGRESDB_PASSWORD
-        sync: false # Render dashboard me manually add karna
+        value: Raohit@123qwer
       - key: DB_POSTGRESDB_SCHEMA
         value: public
       - key: PORT
@@ -28,3 +28,8 @@ services:
         value: Asia/Kolkata
       - key: TZ
         value: Asia/Kolkata
+envVars:
+  - key: N8N_DATABASE_RECONNECT_TIMEOUT
+    value: "120" # 120 sec tak retry kare
+  - key: N8N_DATABASE_RECONNECT_INTERVAL
+    value: "2000" # 2 sec ke interval me try kare
