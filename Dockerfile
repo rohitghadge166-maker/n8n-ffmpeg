@@ -1,9 +1,8 @@
-# Base n8n image
+# n8n official image use karo
 FROM n8nio/n8n:latest
 
-# Switch to root to install util-linux + bash (optional, for debugging)
-USER root
-RUN apk add --no-cache util-linux bash
+# Render ko batane ke liye port expose karo
+ENV PORT=5678
 
-# Switch back to n8n user
-USER node
+# n8n start command
+CMD ["n8n", "start"]
