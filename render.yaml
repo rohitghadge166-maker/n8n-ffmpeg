@@ -1,31 +1,4 @@
-services:
-  - type: web
-    name: n8n
-    env: docker
-    plan: free
-    branch: main
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: DB_TYPE
-        value: postgresdb
-      - key: DB_POSTGRESDB_HOST
-        value: aws-1-ap-south-1.pooler.supabase.com
-      - key: DB_POSTGRESDB_PORT
-        value: "6543"
-      - key: DB_POSTGRESDB_DATABASE
-        value: postgres
-      - key: DB_POSTGRESDB_USER
-        value: postgres.hkuupvjihrefteunshpk
-      - key: DB_POSTGRESDB_PASSWORD
-        value: Raohit@123qwer
-      - key: DB_POSTGRESDB_SCHEMA
-        value: public
-      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
-        value: "true"
-      - key: GENERIC_TIMEZONE
-        value: Asia/Kolkata
-      - key: TZ
-        value: Asia/Kolkata
+
 envVars:
   - key: N8N_DATABASE_RECONNECT_TIMEOUT
     value: "120" # 120 sec tak retry kare
