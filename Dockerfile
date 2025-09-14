@@ -1,8 +1,11 @@
-# n8n official image use karo
+# ✅ Official n8n image
 FROM n8nio/n8n:latest
 
-# Render ko batane ke liye port expose karo
+# ✅ Internal port set
 ENV PORT=5678
 
-# n8n start command
+# ✅ Expose port (good practice)
+EXPOSE 5678
+
+# ✅ Start n8n
 CMD ["n8n", "start"]
