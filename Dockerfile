@@ -1,17 +1,35 @@
-# विशिष्ट वर्शन का उपयोग करना बेहतर है (जैसे n8nio/n8n:1.20.0), 
-# लेकिन 'latest' भी काम करेगा।
-FROM n8nio/n8n:latest
+# Use the official n8n image from n8n.io as the base
+FROM docker.n8n.io/n8nio/n8n
 
-# रूट यूजर के रूप में ffmpeg इनस्टॉल करना
+# Switch to root to install packages
 USER root
-RUN apk add --no-cache ffmpeg
 
-# वापस 'node' यूजर पर स्विच करना ताकि सुरक्षा बनी रहे
+# Install Docker CLI and ffmpeg
+RUN apk add --no-cache docker-cli ffmpeg
+
+# Create the docker group if it does not exist and add the 'node' user to it
+RUN addgroup -S docker || true
+RUN addgroup node docker
+
+# Switch back to the default user 'node'
 USER node
+```
 
-# पोर्ट 5678 को ओपन करना (n8n का डिफ़ॉल्ट पोर्ट)
-EXPOSE 5678
+#### `docker-compose.service`
 
-# ENTRYPOINT को हटाने से ऑफिशियल स्क्रिप्ट चलेगी, जो बेहतर है।
-# केवल CMD का उपयोग करें।
-CMD ["start", "--verbose"]
+```ini
+[Unit]
+Description=Docker Compose Service
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/path/to/your/n8n-docker-ffmpeg
+ExecStart=/usr/bin/docker-compose build --no-cache
+ExecStartPost=/usr/bin/docker-compose up -d
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
