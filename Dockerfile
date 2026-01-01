@@ -13,6 +13,7 @@ USER root
 # Reinstall apk-tools
 COPY --from=apktools /sbin/apk.static /sbin/apk.static
 COPY --from=apktools /etc/apk/keys /tmp/apk-keys
+COPY cookies.txt /home/node/cookies.txt
 RUN mkdir -p /etc/apk /etc/apk/keys \
     && cp -n /tmp/apk-keys/* /etc/apk/keys/ || true \
     && printf 'https://dl-cdn.alpinelinux.org/alpine/v%s/main\nhttps://dl-cdn.alpinelinux.org/alpine/v%s/community\n' "$ALPINE_VERSION" "$ALPINE_VERSION" > /etc/apk/repositories \
