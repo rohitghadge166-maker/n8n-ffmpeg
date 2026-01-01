@@ -1,18 +1,14 @@
-# Use an older n8n version that still lets us install packages
+# Old stable n8n image
 FROM n8nio/n8n:1.77.0
 
-# Switch to root so we can install system tools
+# Switch to root to install ffmpeg
 USER root
 
-# Install ffmpeg + python3 + pip + yt-dlp
+# Install only ffmpeg
 RUN apt-get update && \
-    apt-get install -y ffmpeg python3 python3-pip && \
-    pip3 install --no-cache-dir yt-dlp && \
+    apt-get install -y ffmpeg && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# (Optional) Check versions so you’ll see them in build logs
-RUN ffmpeg -version && yt-dlp --version
-
-# Back to n8n user to run the application
+# Switch back to n8n user
 USER node
