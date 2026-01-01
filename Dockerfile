@@ -1,11 +1,16 @@
-# Use prebuilt n8n image with ffmpeg + yt-dlp
-FROM ghcr.io/cellulardata/n8n-ffmpeg-yt-dlp:latest
+# Use an older n8n version as base so we can install system packages
+FROM docker.n8n.io/n8nio/n8n:1.123.9
 
-# Switch to root if you need extra packages (optional)
 USER root
 
-# Optional: add any small packages you need
-# RUN apk add --no-cache bash curl git unzip
+# Update + install system tools + ffmpeg + python/pip
+RUN apt-get update && \
+    apt-get install -y ffmpeg python3 python3-pip curl && \
+    pip3 install --no-cache-dir yt-dlp && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Switch back to n8n user
+# Verify tools (optional — you can remove this)
+RUN ffmpeg -version && yt-dlp --version
+
 USER node
