@@ -3,6 +3,9 @@ version: "3"
 services:
   n8n-ffmpeg:
     image: rxchi1d/n8n-ffmpeg:latest
+    restart: always
+    environment:
+      - N8N_NODES_INCLUDE=n8n-nodes-base.executeCommand
     ports:
       - "5678:5678"
     volumes:
