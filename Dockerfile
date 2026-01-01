@@ -1,24 +1,11 @@
-# Base image
-FROM n8nio/n8n:latest
+# Use prebuilt n8n image with ffmpeg + yt-dlp
+FROM ghcr.io/cellulardata/n8n-ffmpeg-yt-dlp:latest
 
-# Switch to root to install packages
+# Switch to root if you need extra packages (optional)
 USER root
 
-# Install dependencies: ffmpeg, python3, pip, bash, curl
-RUN apk update && \
-    apk add --no-cache \
-      ffmpeg \
-      python3 \
-      py3-pip \
-      bash \
-      curl \
-      git \
-      unzip && \
-    python3 -m ensurepip && \
-    pip3 install --no-cache-dir --upgrade pip yt-dlp
-
-# Verify installation (optional, Render logs me dekh sakte ho)
-RUN ffmpeg -version && yt-dlp --version
+# Optional: add any small packages you need
+# RUN apk add --no-cache bash curl git unzip
 
 # Switch back to n8n user
 USER node
