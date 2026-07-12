@@ -2,14 +2,6 @@ FROM n8nio/n8n:latest
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y \
-        ffmpeg \
-        bash \
-        curl \
-        wget \
-        tzdata && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN cat /etc/os-release
 
 USER node
